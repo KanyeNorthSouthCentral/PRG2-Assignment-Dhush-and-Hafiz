@@ -3,8 +3,8 @@
 // Student Name : Dhushyanth
 // Partner Name : Hafiz
 //==========================================================
-using System.Collections.Generic;
 
+using System.Collections.Generic;
 public class Airline
 {
     public string Name { get; set; }
