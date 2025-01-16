@@ -1,10 +1,9 @@
-
-
-
-
+//==========================================================
+// Student Number : S10270619
+// Student Name : Dhushyanth
+// Partner Name : Hafiz
+//==========================================================
 using System.Collections.Generic;
-
-//DHUSH//
 public class Terminal
 {
     public string TerminalName { get; set; }
