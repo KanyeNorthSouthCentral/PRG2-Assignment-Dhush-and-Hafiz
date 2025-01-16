@@ -1,6 +1,10 @@
-using System.Collections.Generic;
+//==========================================================
+// Student Number : S10270619
+// Student Name : Dhushyanth
+// Partner Name : Hafiz
+//==========================================================
 
-//DHUSH//
+using System.Collections.Generic;
 public class Airline
 {
     public string Name { get; set; }
