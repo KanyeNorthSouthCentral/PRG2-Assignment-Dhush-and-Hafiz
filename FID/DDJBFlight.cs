@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FID
-{
-    internal class Terminal
-    {
-    }
-}
+//namespace FID
+//{
+//    internal class DDJBFlight : Flight
+//    {
+        
+    
+//    }
+//}
