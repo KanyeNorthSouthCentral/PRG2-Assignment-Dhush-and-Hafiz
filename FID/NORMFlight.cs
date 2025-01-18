@@ -6,7 +6,17 @@ using System.Threading.Tasks;
 
 namespace FID
 {
-    internal class Terminal
+    class NORMFlight : Flight
     {
+        public NORMFlight(string flightNumber, string origin, string destination, DateTime expectedTime, string status) : base(flightNumber, origin, destination, expectedTime, status)
+        {
+
+        }
+
+        public override double CalculateFees()
+        {
+            double baseFee = 300;
+            return baseFee;
+        }
     }
 }

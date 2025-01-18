@@ -9,20 +9,20 @@ namespace FID
 {
     class LWTTFlight : Flight
     {
-		private double requestFee;
+		public double RequestFee { get; set; }
 
-		public double RequestFee
-		{
-			get { return requestFee; }
-			set { requestFee = value; }
-		}
+        public LWTTFlight(string flightNumber, string origin, string destination, DateTime expectedTime, string status, double requestFee) : base(flightNumber, origin, destination, expectedTime, status)
+        {
+            RequestFee = 500;
+        }
 
-		public LWTTFlight()
-		{
+        public override double CalculateFees()
+        {
+            double baseFee = 300;
+            return baseFee + RequestFee;
+        }
 
-		}
 
 
-
-	}
+    }
 }
