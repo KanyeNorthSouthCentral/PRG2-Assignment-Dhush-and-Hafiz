@@ -15,8 +15,7 @@ namespace FID
 
         public override double CalculateFees()
         {
-            double baseFee = 300;
-            return baseFee;
+            return base.CalculateFees();
         }
     }
 }

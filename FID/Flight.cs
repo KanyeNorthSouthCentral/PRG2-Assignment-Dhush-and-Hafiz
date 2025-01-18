@@ -21,7 +21,11 @@ public abstract class Flight
         Status = status;
     }
 
-    public abstract double CalculateFees();
+    public virtual double CalculateFees()
+    {
+        double baseFee = 300;
+        return baseFee;
+    }
 
     public override string ToString()
     {
