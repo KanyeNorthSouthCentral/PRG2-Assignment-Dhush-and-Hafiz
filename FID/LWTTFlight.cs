@@ -4,7 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-// Muhammad Hafiz Bin Mohamed Noor S10270616F
+//==========================================================
+// Student Number : S10270616
+// Student Name : Hafiz
+// Partner Name : Dhushyanth
+//==========================================================
 namespace FID
 {
     class LWTTFlight : Flight
@@ -21,6 +25,10 @@ namespace FID
             return base.CalculateFees() + RequestFee;
         }
 
+        public override string ToString()
+        {
+            return $"{base.ToString()}, {CalculateFees()}";
+        }
 
 
     }

@@ -4,6 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//==========================================================
+// Student Number : S10270616
+// Student Name : Hafiz
+// Partner Name : Dhushyanth
+//==========================================================
+
 namespace FID
 {
     class NORMFlight : Flight
@@ -16,6 +22,11 @@ namespace FID
         public override double CalculateFees()
         {
             return base.CalculateFees();
+        }
+
+        public override string ToString()
+        {
+            return $"{base.ToString()}, {CalculateFees()}";
         }
     }
 }
