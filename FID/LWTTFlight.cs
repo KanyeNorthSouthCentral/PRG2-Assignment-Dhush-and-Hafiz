@@ -4,9 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// Muhammad Hafiz Bin Mohamed Noor S10270616F
 namespace FID
 {
-    internal class Terminal
+    class LWTTFlight : Flight
     {
-    }
+		private double requestFee;
+
+		public double RequestFee
+		{
+			get { return requestFee; }
+			set { requestFee = value; }
+		}
+
+		public LWTTFlight()
+		{
+
+		}
+
+
+
+	}
 }
