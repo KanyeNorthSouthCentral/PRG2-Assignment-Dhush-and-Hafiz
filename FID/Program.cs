@@ -77,7 +77,6 @@ class Program
             while ((line = sr.ReadLine()) != null)
             {
                 var data = line.Split(',');
-                if (data.Length >= 2)
                 {
                     string code = data[0].Trim();
                     string name = data[1].Trim();
@@ -100,7 +99,6 @@ class Program
             while ((line = sr.ReadLine()) != null)
             {
                 var data = line.Split(',');
-                if (data.Length >= 4)
                 {
                     string gateName = data[0].Trim();
                     bool supportsCFFT = bool.Parse(data[1].Trim());
@@ -117,57 +115,6 @@ class Program
     //Hafiz Feature 2 //
     static void LoadFlights()
     {
-        Console.WriteLine("Loading Flights...");
-int count = 0;
-try
-{
-    using (StreamReader sr = new StreamReader("flights.csv"))
-    {
-        sr.ReadLine(); // Skip header
-        string line;
-        while ((line = sr.ReadLine()) != null)
-        {
-            var data = line.Split(',');
-            if (data.Length >= 5 && DateTime.TryParse(data[3].Trim(), out DateTime expectedTime))
-            {
-                string flightNumber = data[0].Trim();
-                string origin = data[1].Trim();
-                string destination = data[2].Trim();
-                string requestType = data[4].Trim(); // Special Request Code
-
-                // Default status for flights
-                string status = "Scheduled";
-
-                Flight flight = requestType switch
-                {
-                    "CFFT" => new CFFTFlight(flightNumber, origin, destination, expectedTime, status, 150),
-                    "DDJB" => new DDJBFlight(flightNumber, origin, destination, expectedTime, status, 300),
-                    "LWTT" => new LWTTFlight(flightNumber, origin, destination, expectedTime, status, 500),
-                    _ => new NORMFlight(flightNumber, origin, destination, expectedTime, status)
-                };
-
-                flights[flightNumber] = flight;
-
-                string airlineCode = flightNumber.Substring(0, 2);
-                if (airlines.ContainsKey(airlineCode))
-                {
-                    airlines[airlineCode].AddFlight(flight);
-                }
-
-                count++;
-            }
-            else
-            {
-                Console.WriteLine($"Invalid row skipped: {line}");
-            }
-        }
-    }
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"Error loading flights: {ex.Message}");
-}
-Console.WriteLine($"{count} Flights Loaded!");
     }
 
     //Hafiz Feature 3 //
