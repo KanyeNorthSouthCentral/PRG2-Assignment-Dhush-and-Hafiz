@@ -62,7 +62,7 @@ class Program
         Console.WriteLine("6. Modify Flight Details");
         Console.WriteLine("7. Display Flight Schedule");
         Console.WriteLine("0. Exit");
-        Console.WriteLine("\nPlease select your option:");
+        Console.Write("\nPlease select your option: ");
     }
 
     //DHUSH Feature 1//
@@ -82,8 +82,8 @@ class Program
             {
                 var data = line.Split(','); 
                 // Extracting the airline name and code
-                string code = data[0].Trim();  // Trim to remove any extra spaces
-                string name = data[1].Trim();  // Trim to remove any extra spaces
+                string name = data[0].Trim();  // Trim to remove any extra spaces
+                string code = data[1].Trim();  // Trim to remove any extra spaces
                 // Add the name and code into the dictionary
                 airlines[code] = new Airline(name, code);
                 // increase the counter 
@@ -128,13 +128,81 @@ class Program
     //Hafiz Feature 2 //
     static void LoadFlights()
     {
+        Console.WriteLine("Loading Flights...");
+        int count = 0;
+        try
+        {
+            using (StreamReader sr = new StreamReader("flights.csv"))
+            {
+                sr.ReadLine();
+                string line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    var data = line.Split(',');
+                    if (data.Length >= 5 && DateTime.TryParse(data[3].Trim(), out DateTime expectedTime))
+                    {
+                        string flightNumber = data[0].Trim();
+                        string origin = data[1].Trim();
+                        string destination = data[2].Trim();
+                        string requestType = data[4].Trim(); // Special Request Code
+
+                        // Default status for flights
+                        string status = "Scheduled";
+
+                        Flight flight = requestType switch
+                        {
+                            "CFFT" => new CFFTFlight(flightNumber, origin, destination, expectedTime, status, 150),
+                            "DDJB" => new DDJBFlight(flightNumber, origin, destination, expectedTime, status, 300),
+                            "LWTT" => new LWTTFlight(flightNumber, origin, destination, expectedTime, status, 500),
+                            _ => new NORMFlight(flightNumber, origin, destination, expectedTime, status)
+                        };
+
+                        flights[flightNumber] = flight;
+
+                        string airlineCode = flightNumber.Substring(0, 2);
+                        if (airlines.ContainsKey(airlineCode))
+                        {
+                            airlines[airlineCode].AddFlight(flight);
+                        }
+
+                        count++;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Invalid row skipped: {line}");
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading flights: {ex.Message}");
+        }
+        Console.WriteLine($"{count} Flights Loaded!");
     }
 
     //Hafiz Feature 3 //
     static void ListAllFlights()
     {
+        Console.WriteLine("=============================================");
+        Console.WriteLine("List of All Flights");
+        Console.WriteLine("=============================================");
+        Console.WriteLine($"{"Flight Number",-15} {"Airline Name",-25} {"Origin",-20} {"Destination",-20} {"Expected Departure/Arrival Time",-30}");
+
+        foreach (var flight in flights.Values)
+        {
+            string airlineCode = flight.FlightNumber.Substring(0, 2).Trim();
+            string airlineName = "Unknown Airline";
+
+            if (airlines.ContainsKey(airlineCode))
+            {
+                airlineName = airlines[airlineCode].Name;
+            }
+
+            Console.WriteLine($"{flight.FlightNumber,-15} {airlineName,-25} {flight.Origin,-20} {flight.Destination,-20} {flight.ExpectedTime.ToString("dd/M/yyyy HH:mm"),-30}");
+        }
     }
-    
+
     //Dhush Feature 4 //
     static void ListBoardingGates()
     {
