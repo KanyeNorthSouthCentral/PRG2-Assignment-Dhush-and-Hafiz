@@ -76,7 +76,7 @@ class Program
         Console.WriteLine("6. Modify Flight Details");
         Console.WriteLine("7. Display Flight Schedule");
         Console.WriteLine("0. Exit");
-        Console.WriteLine("\nPlease select your option:");
+        Console.Write("\nPlease select your option: ");
     }
 
     //DHUSH Feature 1//
@@ -200,6 +200,7 @@ class Program
         Console.WriteLine("=============================================");
         Console.WriteLine("List of Flights for Changi Airport Terminal 5");
         Console.WriteLine("=============================================");
+        Console.WriteLine($"{"Flight Number",-15} {"Airline Name",-25} {"Origin",-20} {"Destination",-20} {"Expected Departure/Arrival Time",-30}");
 
         foreach (var flight in flights.Values)
         {
