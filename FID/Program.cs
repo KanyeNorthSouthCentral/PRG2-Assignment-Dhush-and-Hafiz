@@ -96,8 +96,8 @@ class Program
             {
                 var data = line.Split(',');
                 // Extracting the airline name and code
-                string code = data[0].Trim();  // Trim to remove any extra spaces
-                string name = data[1].Trim();  // Trim to remove any extra spaces
+                string name = data[0].Trim();  // Trim to remove any extra spaces
+                string code = data[1].Trim();  // Trim to remove any extra spaces
                 // Add the name and code into the dictionary
                 airlines[code] = new Airline(name, code);
                 // increase the counter 
