@@ -148,4 +148,14 @@ class Program
             Console.WriteLine($"{gate.GateName,-15}{gate.SupportsDDJB,-20}{gate.SupportsCFFT,-20}{gate.SupportsLWTT}");
         }
     }
+    
+    //Hafiz Feature 5 //
+
+    //Hafiz Feature 6 //
+
+    //Dhush Feature 7 //
+
+    //Dhush Feature 8 //
+
+    //Hafiz Feature 9 //
 }
