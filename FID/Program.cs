@@ -11,6 +11,7 @@ class Program
 
     static void Main(string[] args)
     {
+        
 
         LoadAirlines();
         LoadBoardingGates();
@@ -38,7 +39,7 @@ class Program
             }
         }
     }
-    
+
     //COllab//
     static int GetUserInput()
     {
@@ -62,7 +63,7 @@ class Program
         Console.WriteLine("6. Modify Flight Details");
         Console.WriteLine("7. Display Flight Schedule");
         Console.WriteLine("0. Exit");
-        Console.WriteLine("\nPlease select your option:");
+        Console.Write("\nPlease select your option: ");
     }
 
     //DHUSH Feature 1//
@@ -72,16 +73,16 @@ class Program
         int count = 0;
         using (StreamReader sr = new StreamReader("airlines.csv"))
         {
-            sr.ReadLine(); // Skip header
+            sr.ReadLine();
             string line;
             while ((line = sr.ReadLine()) != null)
             {
                 var data = line.Split(',');
                 if (data.Length >= 2)
                 {
-                    string code = data[0].Trim();
-                    string name = data[1].Trim();
-                    airlines[code] = new Airline(name, code);
+                    string name = data[0].Trim();
+                    string code = data[1].Trim();
+                    airlines[code] = new Airline(name,code);
                     count++;
                 }
             }
@@ -95,7 +96,7 @@ class Program
         int count = 0;
         using (StreamReader sr = new StreamReader("boardinggates.csv"))
         {
-            sr.ReadLine(); // Skip header
+            sr.ReadLine();
             string line;
             while ((line = sr.ReadLine()) != null)
             {
@@ -118,63 +119,83 @@ class Program
     static void LoadFlights()
     {
         Console.WriteLine("Loading Flights...");
-int count = 0;
-try
-{
-    using (StreamReader sr = new StreamReader("flights.csv"))
-    {
-        sr.ReadLine(); // Skip header
-        string line;
-        while ((line = sr.ReadLine()) != null)
+        int count = 0;
+        try
         {
-            var data = line.Split(',');
-            if (data.Length >= 5 && DateTime.TryParse(data[3].Trim(), out DateTime expectedTime))
+            using (StreamReader sr = new StreamReader("flights.csv"))
             {
-                string flightNumber = data[0].Trim();
-                string origin = data[1].Trim();
-                string destination = data[2].Trim();
-                string requestType = data[4].Trim(); // Special Request Code
-
-                // Default status for flights
-                string status = "Scheduled";
-
-                Flight flight = requestType switch
+                sr.ReadLine();
+                string line;
+                while ((line = sr.ReadLine()) != null)
                 {
-                    "CFFT" => new CFFTFlight(flightNumber, origin, destination, expectedTime, status, 150),
-                    "DDJB" => new DDJBFlight(flightNumber, origin, destination, expectedTime, status, 300),
-                    "LWTT" => new LWTTFlight(flightNumber, origin, destination, expectedTime, status, 500),
-                    _ => new NORMFlight(flightNumber, origin, destination, expectedTime, status)
-                };
+                    var data = line.Split(',');
+                    if (data.Length >= 5 && DateTime.TryParse(data[3].Trim(), out DateTime expectedTime))
+                    {
+                        string flightNumber = data[0].Trim();
+                        string origin = data[1].Trim();
+                        string destination = data[2].Trim();
+                        string requestType = data[4].Trim(); // Special Request Code
 
-                flights[flightNumber] = flight;
+                        // Default status for flights
+                        string status = "Scheduled";
 
-                string airlineCode = flightNumber.Substring(0, 2);
-                if (airlines.ContainsKey(airlineCode))
-                {
-                    airlines[airlineCode].AddFlight(flight);
+                        Flight flight = requestType switch
+                        {
+                            "CFFT" => new CFFTFlight(flightNumber, origin, destination, expectedTime, status, 150),
+                            "DDJB" => new DDJBFlight(flightNumber, origin, destination, expectedTime, status, 300),
+                            "LWTT" => new LWTTFlight(flightNumber, origin, destination, expectedTime, status, 500),
+                            _ => new NORMFlight(flightNumber, origin, destination, expectedTime, status)
+                        };
+
+                        flights[flightNumber] = flight;
+
+                        string airlineCode = flightNumber.Substring(0, 2);
+                        if (airlines.ContainsKey(airlineCode))
+                        {
+                            airlines[airlineCode].AddFlight(flight);
+                        }
+
+                        count++;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Invalid row skipped: {line}");
+                    }
                 }
-
-                count++;
-            }
-            else
-            {
-                Console.WriteLine($"Invalid row skipped: {line}");
             }
         }
-    }
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"Error loading flights: {ex.Message}");
-}
-Console.WriteLine($"{count} Flights Loaded!");
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading flights: {ex.Message}");
+        }
+        Console.WriteLine($"{count} Flights Loaded!");
     }
 
     //Hafiz Feature 3 //
     static void ListAllFlights()
     {
+        Console.WriteLine("=============================================");
+        Console.WriteLine("List of All Flights");
+        Console.WriteLine("=============================================");
+        Console.WriteLine($"{"Flight Number",-15} {"Airline Name",-25} {"Origin",-20} {"Destination",-20} {"Expected Departure/Arrival Time",-30}");
+
+        foreach (var flight in flights.Values)
+        {
+            string airlineCode = flight.FlightNumber.Substring(0, 2).Trim();
+            string airlineName = "Unknown Airline";
+            
+            if (airlines.ContainsKey(airlineCode))
+            {
+                airlineName = airlines[airlineCode].Name;
+            }
+            
+            Console.WriteLine($"{flight.FlightNumber,-15} {airlineName,-25} {flight.Origin,-20} {flight.Destination,-20} {flight.ExpectedTime.ToString("dd/M/yyyy HH:mm"),-30}");
+        }
     }
-    
+
+
+
+
     //Dhush Feature 4 //
     static void ListBoardingGates()
     {
