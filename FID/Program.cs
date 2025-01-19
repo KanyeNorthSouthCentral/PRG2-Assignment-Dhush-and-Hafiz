@@ -66,44 +66,58 @@ class Program
     }
 
     //DHUSH Feature 1//
-    static void LoadAirlines()
+static void LoadAirlines()
+{
+    Console.WriteLine("Loading Airlines...");    
+    // Counter to track how many airlines loaded
+    int count = 0;
+    // Reading of the csv
+    using (StreamReader sr = new StreamReader("airlines.csv"))
     {
-        Console.WriteLine("Loading Airlines...");
-        int count = 0;
-        using (StreamReader sr = new StreamReader("airlines.csv"))
+        sr.ReadLine(); // Skip header
+        // Variable to hold the line of the file as it is read
+        string line;
+        // Loop to read file till then end of the line 
+        while ((line = sr.ReadLine()) != null)
         {
-            sr.ReadLine(); // Skip header
-            string line;
-            while ((line = sr.ReadLine()) != null)
-            {
-                var data = line.Split(',');
-                {
-                    string code = data[0].Trim();
-                    string name = data[1].Trim();
-                    airlines[code] = new Airline(name, code);
-                    count++;
-                }
-            }
+            var data = line.Split(','); 
+            // Extracting the airline name and code
+            string code = data[0].Trim();  // Trim to remove any extra spaces
+            string name = data[1].Trim();  // Trim to remove any extra spaces
+            // Add the name and code into the dictionary
+            airlines[code] = new Airline(name, code);
+            // increase the counter 
+            count++;
         }
-        Console.WriteLine($"{count} Airlines Loaded!");
     }
+    
+    //  Total number of airlines that were loaded from the file
+    Console.WriteLine($"{count} Airlines Loaded!");
+}
+
 
     static void LoadBoardingGates()
     {
         Console.WriteLine("Loading Boarding Gates...");
+        // Counter to track how many airlines loaded
         int count = 0;
+        // Reading of the csv
         using (StreamReader sr = new StreamReader("boardinggates.csv"))
         {
             sr.ReadLine(); // Skip header
+            // Variable to hold the line of the file as it is read
             string line;
+            // Loop to read file till then end of the line 
             while ((line = sr.ReadLine()) != null)
             {
                 var data = line.Split(',');
                 {
+                    // Extracting the Boarding Gate name and special request
                     string gateName = data[0].Trim();
-                    bool supportsCFFT = bool.Parse(data[1].Trim());
-                    bool supportsDDJB = bool.Parse(data[2].Trim());
-                    bool supportsLWTT = bool.Parse(data[3].Trim());
+                    bool supportsCFFT = bool.Parse(data[1].Trim()); // Parse as boolean (true/false)
+                    bool supportsDDJB = bool.Parse(data[2].Trim()); // Parse as boolean (true/false)
+                    bool supportsLWTT = bool.Parse(data[3].Trim()); // Parse as boolean (true/false)
+                    // Add the Boarding Gate name and special request into the dictionary
                     boardingGates[gateName] = new BoardingGate(gateName, supportsCFFT, supportsDDJB, supportsLWTT);
                     count++;
                 }
