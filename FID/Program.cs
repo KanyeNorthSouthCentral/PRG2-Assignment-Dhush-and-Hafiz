@@ -66,34 +66,34 @@ class Program
     }
 
     //DHUSH Feature 1//
-static void LoadAirlines()
-{
-    Console.WriteLine("Loading Airlines...");    
-    // Counter to track how many airlines loaded
-    int count = 0;
-    // Reading of the csv
-    using (StreamReader sr = new StreamReader("airlines.csv"))
+    static void LoadAirlines()
     {
-        sr.ReadLine(); // Skip header
-        // Variable to hold the line of the file as it is read
-        string line;
-        // Loop to read file till then end of the line 
-        while ((line = sr.ReadLine()) != null)
+        Console.WriteLine("Loading Airlines...");    
+        // Counter to track how many airlines loaded
+        int count = 0;
+        // Reading of the csv
+        using (StreamReader sr = new StreamReader("airlines.csv"))
         {
-            var data = line.Split(','); 
-            // Extracting the airline name and code
-            string code = data[0].Trim();  // Trim to remove any extra spaces
-            string name = data[1].Trim();  // Trim to remove any extra spaces
-            // Add the name and code into the dictionary
-            airlines[code] = new Airline(name, code);
-            // increase the counter 
-            count++;
+            sr.ReadLine(); // Skip header
+            // Variable to hold the line of the file as it is read
+            string line;
+            // Loop to read file till then end of the line 
+            while ((line = sr.ReadLine()) != null)
+            {
+                var data = line.Split(','); 
+                // Extracting the airline name and code
+                string code = data[0].Trim();  // Trim to remove any extra spaces
+                string name = data[1].Trim();  // Trim to remove any extra spaces
+                // Add the name and code into the dictionary
+                airlines[code] = new Airline(name, code);
+                // increase the counter 
+                count++;
+            }
         }
+        
+        //  Total number of airlines that were loaded from the file
+        Console.WriteLine($"{count} Airlines Loaded!");
     }
-    
-    //  Total number of airlines that were loaded from the file
-    Console.WriteLine($"{count} Airlines Loaded!");
-}
 
 
     static void LoadBoardingGates()
