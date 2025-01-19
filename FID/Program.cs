@@ -95,7 +95,6 @@ class Program
         Console.WriteLine($"{count} Airlines Loaded!");
     }
 
-
     static void LoadBoardingGates()
     {
         Console.WriteLine("Loading Boarding Gates...");
