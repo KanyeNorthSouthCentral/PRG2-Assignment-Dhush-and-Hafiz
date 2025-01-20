@@ -206,6 +206,9 @@ class Program
         Console.WriteLine("=============================================");
         Console.WriteLine($"{"Flight Number",-15} {"Airline Name",-25} {"Origin",-20} {"Destination",-20} {"Expected Departure/Arrival Time",-30}");
 
+        List<Flight> flightList = new List<Flight>(flights.Values);
+        flightList.Sort();
+
         foreach (var flight in flights.Values)
         {
             string airlineCode = flight.FlightNumber.Substring(0, 2).Trim();

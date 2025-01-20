@@ -4,7 +4,7 @@
 // Partner Name : Hafiz
 //==========================================================
 ﻿using System.Collections.Generic;
-public abstract class Flight
+public abstract class Flight : IComparable<Flight>
 {
     public string FlightNumber { get; set; }
     public string Origin { get; set; }
@@ -30,5 +30,10 @@ public abstract class Flight
     public override string ToString()
     {
         return $"{FlightNumber}: {Origin} -> {Destination}, Time: {ExpectedTime}, Status: {Status}";
+    }
+
+    public int CompareTo(Flight f)
+    {
+        return ExpectedTime.CompareTo(f.ExpectedTime);
     }
 }
