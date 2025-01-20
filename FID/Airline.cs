@@ -28,12 +28,7 @@ public class Airline
         }
         return false;
     }
-
-    public bool RemoveFlight(Flight flight)
-    {
-        return Flights.Remove(flight.FlightNumber);
-    }
-
+    
     public double CalculateFees()
     {
         double total = 0;
@@ -42,6 +37,11 @@ public class Airline
             total += flight.CalculateFees();
         }
         return total;
+    }
+    
+    public bool RemoveFlight(Flight flight)
+    {
+        return Flights.Remove(flight.FlightNumber);
     }
 
     public override string ToString()
