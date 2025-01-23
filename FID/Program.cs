@@ -78,7 +78,6 @@ class Program
         Console.WriteLine("5. Display Airline Flights");
         Console.WriteLine("6. Modify Flight Details");
         Console.WriteLine("7. Display Flight Schedule");
-        Console.WriteLine("8. Search and Filter Flights");
         Console.WriteLine("0. Exit");
         Console.Write("\nPlease select your option: ");
     }
