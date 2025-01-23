@@ -131,8 +131,8 @@ class Program
                 {
                     // Extracting the Boarding Gate name and special request
                     string gateName = data[0].Trim();
-                    bool supportsCFFT = bool.Parse(data[1].Trim()); // Parse as boolean (true/false)
-                    bool supportsDDJB = bool.Parse(data[2].Trim()); // Parse as boolean (true/false)
+                    bool supportsDDJB = bool.Parse(data[1].Trim()); // Parse as boolean (true/false)
+                    bool supportsCFFT = bool.Parse(data[2].Trim()); // Parse as boolean (true/false)
                     bool supportsLWTT = bool.Parse(data[3].Trim()); // Parse as boolean (true/false)
                     // Add the Boarding Gate name and special request into the dictionary
                     boardingGates[gateName] = new BoardingGate(gateName, supportsCFFT, supportsDDJB, supportsLWTT);
