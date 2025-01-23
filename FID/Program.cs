@@ -1,4 +1,4 @@
-using FID;
+﻿using FID;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,19 +32,19 @@ class Program
                     AssignBoardingGateToFlight();
                     break;
                 case 4:
-                    CreateFlight();
+                    //CreateFlight();
                     break;
                 case 5:
-                    DisplayFullFlightDetailsFromAirline();
+                    //DisplayFullFlightDetailsFromAirline();
                     break;
                 case 6:
-                    ModifyFlightDetails();
+                    //ModifyFlightDetails();
                     break;
                 case 7:
-                    DisplayScheduledFlights();
+                    //DisplayScheduledFlights();
                     break;
                 case 8:
-                    SearchAndFilterFlights();
+                    //SearchAndFilterFlights();
                     break;
                 case 0:
                     Console.WriteLine("Exiting program. Goodbye!");
@@ -239,9 +239,95 @@ class Program
     }
 
     //Hafiz Feature 5 //
+
     static void AssignBoardingGateToFlight()
     {
+        Console.WriteLine("=============================================");
+        Console.WriteLine("Assign a Boarding Gate to a Flight");
+        Console.WriteLine("=============================================");
+
+        // Prompt the user for the Flight Number
+        Console.Write("Enter Flight Number: ");
+        string flightNumber = Console.ReadLine().Trim().ToUpper();
+
+        // Check if the flight exists
+        if (!flights.ContainsKey(flightNumber))
+        {
+            Console.WriteLine("Invalid Flight Number. Please try again.");
+            return;
+        }
+
+        Flight flight = flights[flightNumber];
+
+        // Prompt the user for the Boarding Gate Name
+        Console.Write("Enter Boarding Gate Name: ");
+        string gateName = Console.ReadLine().Trim().ToUpper();
+
+        // Check if the boarding gate exists
+        if (!boardingGates.ContainsKey(gateName))
+        {
+            Console.WriteLine("Invalid Boarding Gate Name. Please try again.");
+            return;
+        }
+
+        BoardingGate gate = boardingGates[gateName];
+
+        // Check if the boarding gate is already assigned to another flight
+        if (gate.Flight != null)
+        {
+            Console.WriteLine($"Boarding Gate {gateName} is already assigned to another flight. Please choose a different gate.");
+            return;
+        }
+
+        // Display the flight and gate details
+        Console.WriteLine($"Flight Number: {flight.FlightNumber}");
+        Console.WriteLine($"Origin: {flight.Origin}");
+        Console.WriteLine($"Destination: {flight.Destination}");
+        Console.WriteLine($"Expected Time: {flight.ExpectedTime:dd/M/yyyy h:mm:ss tt}");
+        Console.WriteLine($"Special Request Code: None");
+        Console.WriteLine($"Boarding Gate Name: {gate.GateName}");
+        Console.WriteLine($"Supports DDJB: {gate.SupportsDDJB}");
+        Console.WriteLine($"Supports CFFT: {gate.SupportsCFFT}");
+        Console.WriteLine($"Supports LWTT: {gate.SupportsLWTT}");
+
+        // Prompt the user if they would like to update the status of the flight
+        Console.Write("Would you like to update the status of the flight? (Y/N): ");
+        string updateStatus = Console.ReadLine().Trim().ToUpper();
+
+        if (updateStatus == "Y")
+        {
+            Console.WriteLine("1. Delayed");
+            Console.WriteLine("2. Boarding");
+            Console.WriteLine("3. On Time");
+            Console.Write("Please select the new status of the flight: ");
+            int statusOption = int.Parse(Console.ReadLine().Trim());
+
+            if (statusOption == 1)
+            {
+                flight.Status = "Delayed";
+            }
+            else if (statusOption == 2)
+            {
+                flight.Status = "Boarding";
+            }
+            else if (statusOption == 3)
+            {
+                flight.Status = "On Time";
+            }
+            else
+            {
+                Console.WriteLine("Invalid option. Status not updated.");
+            }
+        }
+        
+
+        // Assign the boarding gate to the flight
+        gate.Flight = flight;
+
+        // Display a success message
+        Console.WriteLine($"Flight {flight.FlightNumber} has been assigned to Boarding Gate {gate.GateName}!");
     }
+
 
     //Hafiz Feature 6 //
     static void CreateFlight()
@@ -426,6 +512,7 @@ class Program
     static void SearchAndFilterFlights()
     {
     }
-
-
 }
+
+
+
