@@ -35,17 +35,6 @@ public class Airline
         return false;
     }
 
-    // Method to remove a flight from the airline's collection
-    // Returns true if the flight was found and removed; false otherwise
-    public bool RemoveFlight(Flight flight)
-    {
-        if (Flights.ContainsKey(flight.FlightNumber))
-        {
-            Flights.Remove(flight.FlightNumber);
-            return true;
-        }
-        return false;
-    }
 
     // Method to calculate the total fees for all flights operated by the airline
     // Includes base fees and discounts based on promotional conditions
@@ -69,6 +58,18 @@ public class Airline
             totalFees *= 0.97;
 
         return totalFees;
+    }
+
+    // Method to remove a flight from the airline's collection
+    // Returns true if the flight was found and removed; false otherwise
+    public bool RemoveFlight(Flight flight)
+    {
+        if (Flights.ContainsKey(flight.FlightNumber))
+        {
+            Flights.Remove(flight.FlightNumber);
+            return true;
+        }
+        return false;
     }
 
     // Override ToString() method to provide formatted airline details

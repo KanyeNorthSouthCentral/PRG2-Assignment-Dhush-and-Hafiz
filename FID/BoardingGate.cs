@@ -4,6 +4,7 @@
 // Partner Name : Hafiz
 //==========================================================
 
+using FID;
 using System.Collections.Generic;
 
 public class BoardingGate
@@ -23,12 +24,16 @@ public class BoardingGate
         Flight = null;
     }
 
+    // Calculate fees based on assigned flight
     public double CalculateFees()
     {
         double fees = 300; // Base fee
-        if (SupportsDDJB) fees += 300;
-        if (SupportsCFFT) fees += 150;
-        if (SupportsLWTT) fees += 500;
+        if (Flight is DDJBFlight)
+            fees += 300;
+        if (Flight is CFFTFlight)
+            fees += 150;
+        if (Flight is LWTTFlight)
+            fees += 500;
         return fees;
     }
 
