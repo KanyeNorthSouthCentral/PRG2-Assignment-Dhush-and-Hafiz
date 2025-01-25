@@ -86,7 +86,7 @@ class Program
         Console.Write("\nPlease select your option: ");
     }
 
-    //DHUSH Feature 1//
+    //Dhush Feature 1//
     static void LoadAirlines()
     {
         Console.WriteLine("Loading Airlines...");
@@ -117,7 +117,7 @@ class Program
     }
 
     
-        //Hafiz Feature 2 //
+    //Hafiz Feature 2 //
     static void LoadFlights()
     {
         Console.WriteLine("Loading Flights...");
@@ -197,7 +197,7 @@ class Program
         }
     }
     
-    //DHUSH Feature 4//
+    //Dhush Feature 4//
     static void LoadBoardingGates()
     {
         Console.WriteLine("Loading Boarding Gates...");
