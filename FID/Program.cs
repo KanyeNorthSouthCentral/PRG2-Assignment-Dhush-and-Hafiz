@@ -48,7 +48,7 @@ class Program
                     break;
                 case 7:
                     //Hafiz Feature 9 //
-                    DisplayScheduledFlights();
+                    //DisplayScheduledFlights();
                     break;
                 case 0:
                     Console.WriteLine("Exiting program. Goodbye!");
