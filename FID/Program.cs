@@ -112,37 +112,8 @@ class Program
         Console.WriteLine($"{count} Airlines Loaded!");
     }
 
-    static void LoadBoardingGates()
-    {
-        Console.WriteLine("Loading Boarding Gates...");
-        // Counter to track how many airlines loaded
-        int count = 0;
-        // Reading of the csv
-        using (StreamReader sr = new StreamReader("boardinggates.csv"))
-        {
-            sr.ReadLine(); // Skip header
-            // Variable to hold the line of the file as it is read
-            string line;
-            // Loop to read file till then end of the line 
-            while ((line = sr.ReadLine()) != null)
-            {
-                var data = line.Split(',');
-                {
-                    // Extracting the Boarding Gate name and special request
-                    string gateName = data[0].Trim();
-                    bool supportsDDJB = bool.Parse(data[1].Trim()); // Parse as boolean (true/false)
-                    bool supportsCFFT = bool.Parse(data[2].Trim()); // Parse as boolean (true/false)
-                    bool supportsLWTT = bool.Parse(data[3].Trim()); // Parse as boolean (true/false)
-                    // Add the Boarding Gate name and special request into the dictionary
-                    boardingGates[gateName] = new BoardingGate(gateName, supportsCFFT, supportsDDJB, supportsLWTT);
-                    count++;
-                }
-            }
-        }
-        Console.WriteLine($"{count} Boarding Gates Loaded!");
-    }
-
-    //Hafiz Feature 2 //
+    
+        //Hafiz Feature 2 //
     static void LoadFlights()
     {
         Console.WriteLine("Loading Flights...");
@@ -221,6 +192,37 @@ class Program
             Console.WriteLine($"{flight.FlightNumber,-15} {airlineName,-25} {flight.Origin,-20} {flight.Destination,-20} {flight.ExpectedTime.ToString("dd/M/yyyy HH:mm"),-30}");
         }
     }
+    
+    //DHUSH Feature 4//
+    static void LoadBoardingGates()
+    {
+        Console.WriteLine("Loading Boarding Gates...");
+        // Counter to track how many airlines loaded
+        int count = 0;
+        // Reading of the csv
+        using (StreamReader sr = new StreamReader("boardinggates.csv"))
+        {
+            sr.ReadLine(); // Skip header
+            // Variable to hold the line of the file as it is read
+            string line;
+            // Loop to read file till then end of the line 
+            while ((line = sr.ReadLine()) != null)
+            {
+                var data = line.Split(',');
+                {
+                    // Extracting the Boarding Gate name and special request
+                    string gateName = data[0].Trim();
+                    bool supportsDDJB = bool.Parse(data[1].Trim()); // Parse as boolean (true/false)
+                    bool supportsCFFT = bool.Parse(data[2].Trim()); // Parse as boolean (true/false)
+                    bool supportsLWTT = bool.Parse(data[3].Trim()); // Parse as boolean (true/false)
+                    // Add the Boarding Gate name and special request into the dictionary
+                    boardingGates[gateName] = new BoardingGate(gateName, supportsCFFT, supportsDDJB, supportsLWTT);
+                    count++;
+                }
+            }
+        }
+        Console.WriteLine($"{count} Boarding Gates Loaded!");
+    }
 
     //Dhush Feature 4 //
     static void ListBoardingGates()
@@ -237,8 +239,8 @@ class Program
         }
     }
 
+   
     //Hafiz Feature 5 //
-
     static void AssignBoardingGateToFlight()
     {
         Console.WriteLine("=============================================");
@@ -319,14 +321,11 @@ class Program
             }
         }
         
-
         // Assign the boarding gate to the flight
         gate.Flight = flight;
-
         // Display a success message
         Console.WriteLine($"Flight {flight.FlightNumber} has been assigned to Boarding Gate {gate.GateName}!");
     }
-
 
     //Hafiz Feature 6 //
     static void CreateFlight()
@@ -507,10 +506,7 @@ class Program
     {
     }
 
-    //Dhush AdvancedFeature//
-    static void SearchAndFilterFlights()
-    {
-    }
+
 }
 
 
