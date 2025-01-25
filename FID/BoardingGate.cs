@@ -25,10 +25,14 @@ public class BoardingGate
 
     public double CalculateFees()
     {
-        double fees = 300; // Base fee
-        if (SupportsDDJB) fees += 300;
-        if (SupportsCFFT) fees += 150;
-        if (SupportsLWTT) fees += 500;
+        double fees = 300; // Base fee for all gates
+        if (Flight is DDJBFlight)
+            fees += 300; // Additional fee for DDJB flights
+        if (Flight is CFFTFlight)
+            fees += 150; // Additional fee for CFFT flights
+        if (Flight is LWTTFlight)
+            fees += 500; // Additional fee for LWTT flights
+
         return fees;
     }
 
