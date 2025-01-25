@@ -21,10 +21,56 @@ public abstract class Flight : IComparable<Flight>
         Status = status;
     }
 
-    public virtual double CalculateFees()
+    public double CalculateFees()
     {
-        double baseFee = 300;
-        return baseFee;
+        double totalFee = 0;
+
+        // Flight type fee
+        if (Destination == "SIN")
+        {
+            totalFee += 500;  // Arriving Flight Fee
+        }
+        if (Origin == "SIN")
+        {
+            totalFee += 800;  // Departing Flight Fee
+        }
+
+        // Boarding gate base fee
+        totalFee += 300;
+
+        // Special request code fee
+        switch (SpecialRequestCode)
+        {
+            case "DDJB":
+                totalFee += 300;
+                break;
+            case "CFFT":
+                totalFee += 150;
+                break;
+            case "LWTT":
+                totalFee += 500;
+                break;
+            default:
+                break;
+        }
+
+        // Apply discounts
+        if (ExpectedTime.Hour < 11 || ExpectedTime.Hour > 21)
+        {
+            totalFee -= 110;  // Discount for early or late flights
+        }
+
+        if (Origin == "DXB" || Origin == "BKK" || Origin == "NRT")
+        {
+            totalFee -= 25;  // Discount for specific origins
+        }
+
+        if (string.IsNullOrEmpty(SpecialRequestCode))
+        {
+            totalFee -= 50;  // Discount for flights without special requests
+        }
+
+        return totalFee;
     }
 
     public override string ToString()
