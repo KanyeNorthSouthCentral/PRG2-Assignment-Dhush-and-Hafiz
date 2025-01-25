@@ -49,12 +49,12 @@ public class Airline
 
     // Method to calculate the total fees for all flights operated by the airline
     // Includes base fees and discounts based on promotional conditions
-    public double CalculateTotalFees()
+    public double CalculateFees()
     {
         // Sum up the base fees for all flights
         double totalFees = Flights.Values.Sum(f => f.CalculateFees());
         int flightCount = Flights.Count;
-        
+
         // Apply discount: $350 for every 3 flights arriving/departing
         totalFees -= 350 * (flightCount / 3);
 
@@ -63,9 +63,6 @@ public class Airline
 
         // Apply discount: $25 for flights originating from Dubai (DXB), Bangkok (BKK), or Tokyo (NRT)
         totalFees -= Flights.Values.Count(f => new[] { "DXB", "BKK", "NRT" }.Contains(f.Origin)) * 25;
-
-        // Apply discount: $50 for flights without any special request codes
-        totalFees -= Flights.Values.Count(f => string.IsNullOrEmpty(f.SpecialRequestCode)) * 50;
 
         // Apply 3% discount if the airline has more than 5 flights
         if (flightCount > 5)

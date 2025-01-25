@@ -52,6 +52,7 @@ public class Terminal
             }
         }
         return null; // Return null if no matching airline is found
+    }
 
     public void PrintAirlineFees()
     {
