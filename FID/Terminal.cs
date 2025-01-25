@@ -41,10 +41,17 @@ public class Terminal
         return false;
     }
 
+    // Retrieves an airline based on the flight number prefix (airline code)
     public Airline GetAirlineFromFlight(Flight flight)
     {
-        return Airlines.TryGetValue(flight.FlightNumber.Substring(0, 2), out var airline) ? airline : null;
-    }
+        foreach (var code in Airlines.Keys)
+        {
+            if (flight.FlightNumber.StartsWith(code, StringComparison.OrdinalIgnoreCase))
+            {
+                return Airlines[code];
+            }
+        }
+        return null; // Return null if no matching airline is found
 
     public void PrintAirlineFees()
     {
