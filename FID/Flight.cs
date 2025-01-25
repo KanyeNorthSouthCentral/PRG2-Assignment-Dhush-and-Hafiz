@@ -31,11 +31,13 @@ public abstract class Flight : IComparable<Flight>
     // Method to calculate fees
     public virtual double CalculateFees()
     {
-        double totalFees = 300;  // Boarding Gate Base Fee
+        double totalFees = 300;  // Base boarding gate fee
+
         if (Destination == "SIN")
             totalFees += 500;  // Arriving flight fee
         else if (Origin == "SIN")
             totalFees += 800;  // Departing flight fee
+
         return totalFees;
     }
 
