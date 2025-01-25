@@ -28,8 +28,18 @@ public abstract class Flight : IComparable<Flight>
 
     public virtual double CalculateFees()
     {
-        double baseFee = 300;
-        return baseFee;
+        double BaseFee = 300;  // Boarding Gate Base Fee
+
+        if (Destination == "SIN")
+            BaseFee += 500;  // Arriving flight fee
+        else if (Origin == "SIN")
+            BaseFee += 800;  // Departing flight fee
+        return BaseFee;
+    }
+
+    public int CompareTo(Flight f)
+    {
+        return ExpectedTime.CompareTo(f.ExpectedTime);
     }
 
     public override string ToString()
@@ -37,8 +47,4 @@ public abstract class Flight : IComparable<Flight>
         return $"{FlightNumber}: {Origin} -> {Destination}, Time: {ExpectedTime}, Status: {Status}";
     }
 
-    public int CompareTo(Flight f)
-    {
-        return ExpectedTime.CompareTo(f.ExpectedTime);
-    }
 }
