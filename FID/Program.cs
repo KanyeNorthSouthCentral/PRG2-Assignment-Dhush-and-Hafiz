@@ -23,28 +23,32 @@ class Program
             switch (option)
             {
                 case 1:
+                    //Hafiz Feature 3 //
                     ListAllFlights();
                     break;
                 case 2:
+                    //Dhush Feature 4 //
                     ListBoardingGates();
                     break;
                 case 3:
+                    //Hafiz Feature 5 //
                     AssignBoardingGateToFlight();
                     break;
                 case 4:
+                    //Hafiz Feature 6 //
                     //CreateFlight();
                     break;
                 case 5:
-                    //DisplayFullFlightDetailsFromAirline();
+                    //Dhush Feature 7 //
+                    DisplayFullFlightDetailsFromAirline();
                     break;
                 case 6:
-                    //ModifyFlightDetails();
+                    //Dhush Feature 8 //
+                    ModifyFlightDetails();
                     break;
                 case 7:
-                    //DisplayScheduledFlights();
-                    break;
-                case 8:
-                    //SearchAndFilterFlights();
+                    //Hafiz Feature 9 //
+                    DisplayScheduledFlights();
                     break;
                 case 0:
                     Console.WriteLine("Exiting program. Goodbye!");
