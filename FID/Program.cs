@@ -73,7 +73,7 @@ class Program
     static void ShowMainMenu()
     {
         Console.WriteLine("\n=============================================");
-        Console.WriteLine("Welcome to Changi Airport Terminal 2005");
+        Console.WriteLine("Welcome to Changi Airport Terminal 5");
         Console.WriteLine("=============================================");
         Console.WriteLine("1. List All Flights");
         Console.WriteLine("2. List Boarding Gates");
@@ -243,7 +243,6 @@ class Program
         }
     }
 
-   
     //Hafiz Feature 5 //
     static void AssignBoardingGateToFlight()
     {
