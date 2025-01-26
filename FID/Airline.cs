@@ -35,7 +35,6 @@ public class Airline
         return false;
     }
 
-
     // Method to calculate the total fees for all flights operated by the airline
     // Includes base fees and discounts based on promotional conditions
     public double CalculateFees()
