@@ -96,8 +96,7 @@ class Program
         Console.WriteLine("7. Display Flight Schedule");
         Console.WriteLine("8. Process Unassigned Flights");
         Console.WriteLine("9. Display Total Fee Per Airline");
-        Console.WriteLine("10.Display Flight Schedule");
-        Console.WriteLine("11.Search And Filter Flights");
+        Console.WriteLine("10.Search And Filter Flights");
         Console.WriteLine("0. Exit");
         Console.Write("\nPlease select your option: ");
     }
@@ -711,8 +710,107 @@ class Program
     //DHUSH Aditional Feature//
     static void SearchAndFilterFlights()
     {
-    }
+        Console.WriteLine("=============================================");
+        Console.WriteLine("Search and Filter Flights");
+        Console.WriteLine("=============================================");
 
+        // Prompt the user for search criteria
+        Console.WriteLine("Search and filter flights by:");
+        Console.WriteLine("1. Origin");
+        Console.WriteLine("2. Destination");
+        Console.WriteLine("3. Airline");
+        Console.WriteLine("4. Status");
+        Console.WriteLine("5. Boarding Gate");
+        Console.Write("Enter your choice (1-5): ");
+        int choice = GetUserInput();
+
+        string filterValue = "";
+        switch (choice)
+        {
+            case 1:
+                Console.Write("Enter Origin (e.g., SIN): ");
+                filterValue = Console.ReadLine().Trim().ToUpper();
+                break;
+            case 2:
+                Console.Write("Enter Destination (e.g., SIN): ");
+                filterValue = Console.ReadLine().Trim().ToUpper();
+                break;
+            case 3:
+                Console.Write("Enter Airline Code (e.g., SQ): ");
+                filterValue = Console.ReadLine().Trim().ToUpper();
+                break;
+            case 4:
+                Console.Write("Enter Status (e.g., Scheduled, Boarding, Delayed): ");
+                filterValue = Console.ReadLine().Trim();
+                break;
+            case 5:
+                Console.Write("Enter Boarding Gate (e.g., A1): ");
+                filterValue = Console.ReadLine().Trim().ToUpper();
+                break;
+            default:
+                Console.WriteLine("Invalid choice. Returning to main menu.");
+                return;
+        }
+
+        // Filter flights based on the selected criteria
+        var filteredFlights = flights.Values.Where(flight =>
+        {
+            switch (choice)
+            {
+                case 1:
+                    return flight.Origin.Equals(filterValue, StringComparison.OrdinalIgnoreCase);
+                case 2:
+                    return flight.Destination.Equals(filterValue, StringComparison.OrdinalIgnoreCase);
+                case 3:
+                    string airlineCode = flight.FlightNumber.Substring(0, 2);
+                    return airlineCode.Equals(filterValue, StringComparison.OrdinalIgnoreCase);
+                case 4:
+                    return flight.Status.Equals(filterValue, StringComparison.OrdinalIgnoreCase);
+                case 5:
+                    foreach (var gate in boardingGates.Values)
+                    {
+                        if (gate.Flight != null && gate.Flight.FlightNumber == flight.FlightNumber && gate.GateName.Equals(filterValue, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                default:
+                    return false;
+            }
+        }).ToList();
+
+        // Display the filtered flights
+        if (filteredFlights.Any())
+        {
+            Console.WriteLine("=============================================");
+            Console.WriteLine("Filtered Flights");
+            Console.WriteLine("=============================================");
+            Console.WriteLine($"{"Flight Number",-15} {"Airline Name",-25} {"Origin",-20} {"Destination",-20} {"Expected Time",-30} {"Status",-15} {"Boarding Gate",-15}");
+
+            foreach (var flight in filteredFlights)
+            {
+                string airlineCode = flight.FlightNumber.Substring(0, 2);
+                string airlineName = airlines.ContainsKey(airlineCode) ? airlines[airlineCode].Name : "Unknown Airline";
+                string boardingGate = "Unassigned";
+
+                foreach (var gate in boardingGates.Values)
+                {
+                    if (gate.Flight != null && gate.Flight.FlightNumber == flight.FlightNumber)
+                    {
+                        boardingGate = gate.GateName;
+                        break;
+                    }
+                }
+
+                Console.WriteLine($"{flight.FlightNumber,-15} {airlineName,-25} {flight.Origin,-20} {flight.Destination,-20} {flight.ExpectedTime.ToString("dd/M/yyyy HH:mm"),-30} {flight.Status,-15} {boardingGate,-15}");
+            }
+        }
+        else
+        {
+            Console.WriteLine("No flights found matching the specified criteria.");
+        }
+    }
 
 }
 
