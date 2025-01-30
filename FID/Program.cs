@@ -50,6 +50,18 @@ class Program
                     //Hafiz Feature 9 //
                     DisplayScheduledFlights();
                     break;
+                case 8:
+                    //Dhush Advanced Feature//
+                    ProcessUnassignedFlights();
+                    break;
+                case 9:
+                    //Hafiz Advanced Feature//
+                    DisplayTotalFeePerAirline();
+                    break;
+                case 10:
+                    //Dhush Additional Feature//
+                    SearchAndFilterFlights();
+                    break;
                 case 0:
                     Console.WriteLine("Exiting program. Goodbye!");
                     return;
@@ -596,76 +608,12 @@ class Program
     }
 
     //Dhush Advanced Feature//
-    static void ProcessUnassignedFlights(Terminal terminal)
+    static void ProcessUnassignedFlights()
     {
-        Queue<Flight> unassignedFlights = new Queue<Flight>();
-        int totalUnassignedFlights = 0;
-        int totalUnassignedGates = 0;
-
-        foreach (var flight in terminal.Flights.Values)
-        {
-            if (flight.Status == "Scheduled" && flight.ExpectedTime > DateTime.Now && terminal.GetAirlineFromFlight(flight) != null)
-            {
-                if (!terminal.BoardingGates.Values.Any(g => g.Flight?.FlightNumber == flight.FlightNumber))
-                {
-                    unassignedFlights.Enqueue(flight);
-                    totalUnassignedFlights++;
-                }
-            }
-        }
-
-        foreach (var gate in terminal.BoardingGates.Values)
-        {
-            if (gate.Flight == null)
-            {
-                totalUnassignedGates++;
-            }
-        }
-
-        Console.WriteLine($"Total Unassigned Flights: {totalUnassignedFlights}");
-        Console.WriteLine($"Total Unassigned Gates: {totalUnassignedGates}");
-
-        int flightsProcessed = 0;
-        while (unassignedFlights.Count > 0)
-        {
-            Flight currentFlight = unassignedFlights.Dequeue();
-            BoardingGate assignedGate = null;
-
-            if (currentFlight is CFFTFlight && terminal.BoardingGates.Values.Any(g => g.SupportsCFFT && g.Flight == null))
-            {
-                assignedGate = terminal.BoardingGates.Values.First(g => g.SupportsCFFT && g.Flight == null);
-            }
-            else if (currentFlight is DDJBFlight && terminal.BoardingGates.Values.Any(g => g.SupportsDDJB && g.Flight == null))
-            {
-                assignedGate = terminal.BoardingGates.Values.First(g => g.SupportsDDJB && g.Flight == null);
-            }
-            else if (currentFlight is LWTTFlight && terminal.BoardingGates.Values.Any(g => g.SupportsLWTT && g.Flight == null))
-            {
-                assignedGate = terminal.BoardingGates.Values.First(g => g.SupportsLWTT && g.Flight == null);
-            }
-            else if (terminal.BoardingGates.Values.Any(g => g.Flight == null))
-            {
-                assignedGate = terminal.BoardingGates.Values.First(g => g.Flight == null);
-            }
-
-            if (assignedGate != null)
-            {
-                assignedGate.Flight = currentFlight;
-                flightsProcessed++;
-                Console.WriteLine($"Assigned Flight {currentFlight.FlightNumber} to Gate {assignedGate.GateName}");
-            }
-            else
-            {
-                Console.WriteLine($"No available gate for Flight {currentFlight.FlightNumber}");
-            }
-        }
-
-        Console.WriteLine($"Total Flights Processed and Assigned: {flightsProcessed}");
-        Console.WriteLine($"Total Flights Automatically Assigned: {flightsProcessed * 100.0 / totalUnassignedFlights}%");
     }
 
     //Hafiz Advanced Feature//
-    static void DisplayTotalFeePerAirline(Terminal terminal)
+    static void DisplayTotalFeePerAirline()
     {
 
     }
