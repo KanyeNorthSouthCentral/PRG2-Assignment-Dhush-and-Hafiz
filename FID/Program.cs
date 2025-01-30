@@ -48,7 +48,7 @@ class Program
                     break;
                 case 7:
                     //Hafiz Feature 9 //
-                    //DisplayScheduledFlights();
+                    DisplayScheduledFlights();
                     break;
                 case 0:
                     Console.WriteLine("Exiting program. Goodbye!");
@@ -567,7 +567,33 @@ static void ModifyFlightDetails()
 //Hafiz Feature 9 //
 static void DisplayScheduledFlights()
 {
-}
+
+        Console.WriteLine("=============================================");
+        Console.WriteLine("Flight Schedule for Changi Airport Terminal 5");
+        Console.WriteLine("=============================================");
+        Console.WriteLine($"{"Flight Number",-15} {"Airline Name",-25} {"Origin",-25} {"Destination",-25} {"Expected Departure/Arrival Time",-30}   {"Status",-18} {"Boarding Gate",-15}");
+
+        List<Flight> flightList = new List<Flight>(flights.Values);
+        flightList.Sort();
+
+        foreach (var flight in flightList)
+        {
+            string airlineCode = flight.FlightNumber.Substring(0, 2).Trim();
+            string airlineName = airlines.ContainsKey(airlineCode) ? airlines[airlineCode].Name : "Unknown Airline";
+            string boardingGate = "Unassigned";
+
+            foreach (var gate in boardingGates.Values)
+            {
+                if (gate.Flight != null && gate.Flight.FlightNumber == flight.FlightNumber)
+                {
+                    boardingGate = gate.GateName;
+                    break;
+                }
+            }
+            string expectedTimeFormatted = flight.ExpectedTime.ToString("dd/M/yyyy h:mm:ss tt").PadRight(30);
+            Console.WriteLine($"{flight.FlightNumber,-15} {airlineName,-25} {flight.Origin,-25} {flight.Destination,-25} {expectedTimeFormatted}    {flight.Status,-18} {boardingGate,-16}");
+        }
+    }
 
 
 }
