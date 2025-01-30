@@ -331,7 +331,7 @@ class Program
     }
 
     //Hafiz Feature 6 //
-static void CreateFlight()
+    static void CreateFlight()
 {
         Console.Write("Enter Flight Number: ");
         string flightNumber = Console.ReadLine().Trim().ToUpper();
@@ -395,8 +395,8 @@ static void CreateFlight()
         }
     }
 
-//Dhush Feature 7 //
-static void DisplayFullFlightDetailsFromAirline()
+    //Dhush Feature 7 //
+    static void DisplayFullFlightDetailsFromAirline()
 {
     Console.WriteLine("=============================================");
     Console.WriteLine("List of Airlines for Changi Airport Terminal 5");
@@ -430,8 +430,8 @@ static void DisplayFullFlightDetailsFromAirline()
     }
 }
 
-//Dhush Feature 8 //
-static void ModifyFlightDetails()
+    //Dhush Feature 8 //
+    static void ModifyFlightDetails()
 {
     Console.WriteLine("\n=============================================");
     Console.WriteLine("List of Airlines for Changi Airport Terminal 5");
@@ -564,8 +564,8 @@ static void ModifyFlightDetails()
     }
 }
 
-//Hafiz Feature 9 //
-static void DisplayScheduledFlights()
+    //Hafiz Feature 9 //
+    static void DisplayScheduledFlights()
 {
 
         Console.WriteLine("=============================================");
@@ -593,6 +593,86 @@ static void DisplayScheduledFlights()
             string expectedTimeFormatted = flight.ExpectedTime.ToString("dd/M/yyyy h:mm:ss tt").PadRight(30);
             Console.WriteLine($"{flight.FlightNumber,-15} {airlineName,-25} {flight.Origin,-25} {flight.Destination,-25} {expectedTimeFormatted}    {flight.Status,-18} {boardingGate,-16}");
         }
+    }
+
+    //Dhush Advanced Feature//
+    static void ProcessUnassignedFlights(Terminal terminal)
+    {
+        Queue<Flight> unassignedFlights = new Queue<Flight>();
+        int totalUnassignedFlights = 0;
+        int totalUnassignedGates = 0;
+
+        foreach (var flight in terminal.Flights.Values)
+        {
+            if (flight.Status == "Scheduled" && flight.ExpectedTime > DateTime.Now && terminal.GetAirlineFromFlight(flight) != null)
+            {
+                if (!terminal.BoardingGates.Values.Any(g => g.Flight?.FlightNumber == flight.FlightNumber))
+                {
+                    unassignedFlights.Enqueue(flight);
+                    totalUnassignedFlights++;
+                }
+            }
+        }
+
+        foreach (var gate in terminal.BoardingGates.Values)
+        {
+            if (gate.Flight == null)
+            {
+                totalUnassignedGates++;
+            }
+        }
+
+        Console.WriteLine($"Total Unassigned Flights: {totalUnassignedFlights}");
+        Console.WriteLine($"Total Unassigned Gates: {totalUnassignedGates}");
+
+        int flightsProcessed = 0;
+        while (unassignedFlights.Count > 0)
+        {
+            Flight currentFlight = unassignedFlights.Dequeue();
+            BoardingGate assignedGate = null;
+
+            if (currentFlight is CFFTFlight && terminal.BoardingGates.Values.Any(g => g.SupportsCFFT && g.Flight == null))
+            {
+                assignedGate = terminal.BoardingGates.Values.First(g => g.SupportsCFFT && g.Flight == null);
+            }
+            else if (currentFlight is DDJBFlight && terminal.BoardingGates.Values.Any(g => g.SupportsDDJB && g.Flight == null))
+            {
+                assignedGate = terminal.BoardingGates.Values.First(g => g.SupportsDDJB && g.Flight == null);
+            }
+            else if (currentFlight is LWTTFlight && terminal.BoardingGates.Values.Any(g => g.SupportsLWTT && g.Flight == null))
+            {
+                assignedGate = terminal.BoardingGates.Values.First(g => g.SupportsLWTT && g.Flight == null);
+            }
+            else if (terminal.BoardingGates.Values.Any(g => g.Flight == null))
+            {
+                assignedGate = terminal.BoardingGates.Values.First(g => g.Flight == null);
+            }
+
+            if (assignedGate != null)
+            {
+                assignedGate.Flight = currentFlight;
+                flightsProcessed++;
+                Console.WriteLine($"Assigned Flight {currentFlight.FlightNumber} to Gate {assignedGate.GateName}");
+            }
+            else
+            {
+                Console.WriteLine($"No available gate for Flight {currentFlight.FlightNumber}");
+            }
+        }
+
+        Console.WriteLine($"Total Flights Processed and Assigned: {flightsProcessed}");
+        Console.WriteLine($"Total Flights Automatically Assigned: {flightsProcessed * 100.0 / totalUnassignedFlights}%");
+    }
+
+    //Hafiz Advanced Feature//
+    static void DisplayTotalFeePerAirline(Terminal terminal)
+    {
+
+    }
+
+    //DHUSH Aditional Feature//
+    static void SearchAndFilterFlights()
+    {
     }
 
 
