@@ -94,6 +94,10 @@ class Program
         Console.WriteLine("5. Display Airline Flights");
         Console.WriteLine("6. Modify Flight Details");
         Console.WriteLine("7. Display Flight Schedule");
+        Console.WriteLine("8. Process Unassigned Flights");
+        Console.WriteLine("9. Display Total Fee Per Airline");
+        Console.WriteLine("10.Display Flight Schedule");
+        Console.WriteLine("11.Search And Filter Flights");
         Console.WriteLine("0. Exit");
         Console.Write("\nPlease select your option: ");
     }
@@ -128,7 +132,6 @@ class Program
         Console.WriteLine($"{count} Airlines Loaded!");
     }
 
-    
     //Hafiz Feature 2 //
     static void LoadFlights()
     {
@@ -610,8 +613,95 @@ class Program
     //Dhush Advanced Feature//
     static void ProcessUnassignedFlights()
     {
-    }
+        Console.WriteLine("=============================================");
+        Console.WriteLine("Processing Unassigned Flights");
+        Console.WriteLine("=============================================");
 
+        Queue<Flight> unassignedFlights = new Queue<Flight>();
+        int unassignedFlightCount = 0;
+        int unassignedGateCount = 0;
+
+        // Check for unassigned flights
+        foreach (var flight in flights.Values)
+        {
+            bool isAssigned = false;
+            foreach (var gate in boardingGates.Values)
+            {
+                if (gate.Flight != null && gate.Flight.FlightNumber == flight.FlightNumber)
+                {
+                    isAssigned = true;
+                    break;
+                }
+            }
+            if (!isAssigned)
+            {
+                unassignedFlights.Enqueue(flight);
+                unassignedFlightCount++;
+            }
+        }
+
+        // Check for unassigned boarding gates
+        foreach (var gate in boardingGates.Values)
+        {
+            if (gate.Flight == null)
+            {
+                unassignedGateCount++;
+            }
+        }
+
+        Console.WriteLine($"Total Unassigned Flights: {unassignedFlightCount}");
+        Console.WriteLine($"Total Unassigned Boarding Gates: {unassignedGateCount}");
+
+        // Process unassigned flights
+        while (unassignedFlights.Count > 0)
+        {
+            Flight flight = unassignedFlights.Dequeue();
+            bool assigned = false;
+
+            foreach (var gate in boardingGates.Values)
+            {
+                if (gate.Flight == null)
+                {
+                    if (flight is CFFTFlight && gate.SupportsCFFT)
+                    {
+                        gate.Flight = flight;
+                        assigned = true;
+                        break;
+                    }
+                    else if (flight is DDJBFlight && gate.SupportsDDJB)
+                    {
+                        gate.Flight = flight;
+                        assigned = true;
+                        break;
+                    }
+                    else if (flight is LWTTFlight && gate.SupportsLWTT)
+                    {
+                        gate.Flight = flight;
+                        assigned = true;
+                        break;
+                    }
+                    else if (flight is NORMFlight && !gate.SupportsCFFT && !gate.SupportsDDJB && !gate.SupportsLWTT)
+                    {
+                        gate.Flight = flight;
+                        assigned = true;
+                        break;
+                    }
+                }
+            }
+
+            if (assigned)
+            {
+                Console.WriteLine($"Flight {flight.FlightNumber} assigned to a boarding gate.");
+            }
+            else
+            {
+                Console.WriteLine($"No available gate for Flight {flight.FlightNumber}.");
+            }
+        }
+
+        Console.WriteLine("Processing complete.");
+    }
+    
     //Hafiz Advanced Feature//
     static void DisplayTotalFeePerAirline()
     {
