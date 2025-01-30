@@ -609,7 +609,7 @@ class Program
         }
     }
 
-    //Dhush Advanced Feature//
+    //Dhush Advanced Feature (a) //
     static void ProcessUnassignedFlights()
     {
         Console.WriteLine("=============================================");
@@ -701,7 +701,7 @@ class Program
         Console.WriteLine("Processing complete.");
     }
     
-    //Hafiz Advanced Feature//
+    //Hafiz Advanced Feature (b) //
     static void DisplayTotalFeePerAirline()
     {
 
