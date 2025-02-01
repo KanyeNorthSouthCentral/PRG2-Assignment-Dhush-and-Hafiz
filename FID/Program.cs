@@ -100,9 +100,9 @@ class Program
     }
 
     //Dhush Feature 1 //
+    // Fixed
     static void LoadAirlines()
     {
-        // Fixed
         Console.WriteLine("Loading Airlines...");
         // Counter to track how many airlines loaded
         int count = 0;
@@ -366,9 +366,9 @@ class Program
     }
 
     //Hafiz Feature 6 //
+    // Fixed
     static void CreateFlight()
     {   
-        // Fixed
         while (true)
         {
             string flightNumber;
@@ -535,11 +535,6 @@ class Program
         }
         return false;
     }
-
-
-
-
-
 
     //Dhush Feature 7 //
     static void DisplayFullFlightDetailsFromAirline()
