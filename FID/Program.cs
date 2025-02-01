@@ -600,7 +600,7 @@ class Program
         Console.ReadKey();
     }
 
-    //Dhush Feature 8 //
+    //Dhush Feature 8 //           NEED TO FIX
     static void ModifyFlightDetails()
     {
         Console.WriteLine("\n=============================================");
@@ -1042,7 +1042,8 @@ class Program
         Console.WriteLine($"Total Discount Received (in Percentage): {discountPercent:F2}%");
     }
     // line
-    //DHUSH Additional Feature          ////
+    //DHUSH Additional Feature          ////           NEED TO FIX
+    
     static void SearchAndFilterFlights()
     {
         Console.WriteLine("=============================================");
