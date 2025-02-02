@@ -104,7 +104,7 @@ class Program
         Console.Write("\nPlease select your option: ");
     }
 
-    //Dhush Feature 1     Fixed  ////
+    //Dhush Feature 1 ////
     static void LoadAirlines()
     {
         Console.WriteLine("Loading Airlines...");
@@ -369,7 +369,7 @@ class Program
         Console.WriteLine($"Flight {flight.FlightNumber} has been assigned to Boarding Gate {gate.GateName}!");
     }
 
-    //Hafiz Feature 6      Fixed   ////
+    //Hafiz Feature 6  ////
     static void CreateFlight()
     {   
         while (true)
@@ -603,7 +603,7 @@ class Program
         Console.ReadKey();
     }
 
-    //Dhush Feature 8 //          FIXED
+    //Dhush Feature 8 //   
     static void ModifyFlightDetails()
     {
         Console.WriteLine("\n=============================================");
@@ -878,7 +878,7 @@ class Program
         }
     }
 
-    //Dhush Advanced Feature (a) FIXED //// 
+    //Dhush Advanced Feature (a)  //// 
     static void ProcessUnassignedFlights()
     {
         Console.WriteLine("=============================================");
@@ -997,7 +997,7 @@ class Program
         Console.WriteLine("Processing Complete.");
     }
 
-    //Hafiz Advanced Feature (b) FIXED ////
+    //Hafiz Advanced Feature (b)  ////
     static void DisplayTotalFeePerAirline()
     {
         Console.WriteLine("=============================================");
@@ -1081,7 +1081,7 @@ class Program
         Console.WriteLine($"Total Discount Received (in Percentage): {discountPercent:F2}%");
     }
 
-    //DHUSH Additional Feature  Fixed  //// 
+    //DHUSH Additional Feature    //// 
     static void SearchAndFilterFlights()
     {
         Console.WriteLine("=============================================");
@@ -1216,7 +1216,7 @@ class Program
         }
     }
 
-    //HAFIZ Additional Feature  Fixed  ////
+    //HAFIZ Additional Feature    ////
     static void GenerateFlightDelayReport()
     {
         Console.WriteLine("Generating Flight Delay Report...");
