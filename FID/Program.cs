@@ -60,6 +60,10 @@ class Program
                     //Dhush Additional Feature//
                     SearchAndFilterFlights();
                     break;
+                case 11:
+                    //Dhush Additional Feature//
+                    GenerateFlightDelayReport(); 
+                    break;
                 case 0:
                     Console.WriteLine("Exiting program. Goodbye!");
                     return;
@@ -94,7 +98,8 @@ class Program
         Console.WriteLine("7. Display Flight Schedule");
         Console.WriteLine("8. Process Unassigned Flights");
         Console.WriteLine("9. Display Total Fee Per Airline");
-        Console.WriteLine("10.Search And Filter Flights");
+        Console.WriteLine("10. Search And Filter Flights");
+        Console.WriteLine("11. Generate Flight Delay Report"); // New option
         Console.WriteLine("0. Exit");
         Console.Write("\nPlease select your option: ");
     }
@@ -709,15 +714,32 @@ class Program
                     break;
 
                 case 2: // Modify Status
-                    Console.Write("Enter new Status (Delayed, Boarding, On Time): ");
-                    string newStatus = Console.ReadLine()?.Trim();
-                    if (string.IsNullOrEmpty(newStatus) || !new[] { "Delayed", "Boarding", "On Time" }.Contains(newStatus))
+                    Console.WriteLine("1. Delayed");
+                    Console.WriteLine("2. Boarding");
+                    Console.WriteLine("3. On Time");
+                    Console.Write("Please select the new status of the flight: ");
+                    if (int.TryParse(Console.ReadLine().Trim(), out int statusOption))
                     {
-                        Console.WriteLine("Invalid status. Please enter one of the following: Delayed, Boarding, On Time.");
-                        return;
+                        switch (statusOption)
+                        {
+                            case 1:
+                                selectedFlight.Status = "Delayed";
+                                break;
+                            case 2:
+                                selectedFlight.Status = "Boarding";
+                                break;
+                            case 3:
+                                selectedFlight.Status = "On Time";
+                                break;
+                            default:
+                                Console.WriteLine("Invalid option. Status not updated.");
+                                break;
+                        }
                     }
-                    // Update flight status
-                    selectedFlight.Status = newStatus;
+                    else
+                    {
+                        Console.WriteLine("Invalid input. Status not updated.");
+                    }
                     Console.WriteLine("\nStatus updated successfully.");
                     break;
 
@@ -1059,7 +1081,6 @@ class Program
         Console.WriteLine($"Total Discount Received (in Percentage): {discountPercent:F2}%");
     }
 
-    
     //DHUSH Additional Feature  Fixed  //// 
     static void SearchAndFilterFlights()
     {
@@ -1194,4 +1215,10 @@ class Program
             Console.WriteLine($"{flight.FlightNumber,-15} {airlineName,-25} {flight.Origin,-20} {flight.Destination,-20} {flight.ExpectedTime.ToString("dd/M/yyyy HH:mm"),-30} {flight.Status,-15} {boardingGate,-15}");
         }
     }
+
+    //HAFIZ Additional Feature  Fixed  ////
+    static void GenerateFlightDelayReport()
+    {
+    }
+
 }
