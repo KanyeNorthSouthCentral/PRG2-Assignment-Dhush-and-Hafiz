@@ -1219,6 +1219,29 @@ class Program
     //HAFIZ Additional Feature  Fixed  ////
     static void GenerateFlightDelayReport()
     {
+        Console.WriteLine("Generating Flight Delay Report...");
+
+        var delayedFlights = terminal.Flights.Values.Where(f => f.Status == "Delayed").ToList();
+
+        if (delayedFlights.Count == 0)
+        {
+            Console.WriteLine("No delayed flights found.");
+            return;
+        }
+
+        Console.WriteLine("=============================================");
+        Console.WriteLine("Flight Delay Report for Changi Airport Terminal 5");
+        Console.WriteLine("=============================================");
+        Console.WriteLine($"{"Flight Number",-15} {"Airline Name",-25} {"Origin",-20} {"Destination",-20} {"Expected Time",-30} {"Delay Duration",-20}");
+
+        foreach (var flight in delayedFlights)
+        {
+            string airlineCode = flight.FlightNumber.Substring(0, 2).Trim();
+            string airlineName = terminal.Airlines.ContainsKey(airlineCode) ? terminal.Airlines[airlineCode].Name : "Unknown Airline";
+            TimeSpan delayDuration = DateTime.Now - flight.ExpectedTime;
+
+            Console.WriteLine($"{flight.FlightNumber,-15} {airlineName,-25} {flight.Origin,-20} {flight.Destination,-20} {flight.ExpectedTime.ToString("dd/M/yyyy hh:mm tt"),-30} {delayDuration.Hours} hours {delayDuration.Minutes} minutes");
+        }
     }
 
 }
