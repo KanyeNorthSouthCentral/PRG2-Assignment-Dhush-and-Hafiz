@@ -153,8 +153,31 @@ class Program
                     if (data.Length >= 5 && DateTime.TryParse(data[3].Trim(), out DateTime expectedTime))
                     {
                         string flightNumber = data[0].Trim();
-                        string origin = data[1].Trim();
-                        string destination = data[2].Trim();
+                        string originFull = data[1].Trim();  // e.g. "Tokyo (NRT)"
+                        string destinationFull = data[2].Trim();  // e.g. "Singapore (SIN)"
+
+                        // This function extracts any IATA code inside parentheses:
+                        string ExtractIata(string full)
+                        {
+                            // If the string has parentheses, split or find them
+                            int openParen = full.IndexOf('(');
+                            int closeParen = full.IndexOf(')');
+
+                            // If found, extract what's inside; else return the full string
+                            if (openParen >= 0 && closeParen > openParen)
+                            {
+                                // E.g. "Tokyo (NRT)" => we substring from openParen+1 to closeParen-1 => "NRT"
+                                return full.Substring(openParen + 1, closeParen - (openParen + 1)).Trim();
+                            }
+                            else
+                            {
+                                // No parentheses, just return the entire string
+                                return full;
+                            }
+                        }
+
+                        string origin = ExtractIata(originFull);
+                        string destination = ExtractIata(destinationFull);
                         string requestType = data[4].Trim(); // Special Request Code 
 
                         // Default status for flights 
@@ -1004,81 +1027,91 @@ class Program
         Console.WriteLine("Displaying Total Fees Per Airline");
         Console.WriteLine("=============================================");
 
-        // **Check if any flights are unassigned**
-        bool flightsUnassigned = terminal.Flights.Values.Any(flight => !terminal.BoardingGates.Values.Any(g => g.Flight == flight));
-
-        if (flightsUnassigned)
+        // 1) Check if any flights are unassigned:
+        bool anyUnassigned = terminal.Flights.Values
+            .Any(f => !terminal.BoardingGates.Values.Any(g => g.Flight == f));
+        if (anyUnassigned)
         {
-            Console.WriteLine("Please assign all flights to boarding gates before calculating fees.");
+            Console.WriteLine("Some flights have not been assigned a Boarding Gate.");
+            Console.WriteLine("Please ensure that all unassigned Flights have their Boarding Gates assigned");
+            Console.WriteLine("before running this feature again.\n");
             return;
         }
 
-        double subtotal = 0;
-        double subtotalDiscount = 0;
-        double discountedSubtotal = 0;
+        // Grand totals
+        double grandSubtotal = 0.0;
+        double grandDiscountTotal = 0.0;
+        double grandFinalTotal = 0.0;
 
-        Console.WriteLine($"\n{"Airline Name",-20} {"Total Fees Before Discount",-30} {"Total Discounts",-20} {"Final Total Fees",-16}");
+        Console.WriteLine();
+        Console.WriteLine(
+          $"{"Airline Name",-23} {"Subtotal Before Discount",-28} {"Total Discounts",-18} {"Final Fees",-12}"
+        );
 
-        foreach (var airlineEntry in terminal.Airlines)
+        // 2) Process each airline
+        foreach (var kvp in terminal.Airlines)
         {
-            Airline airline = airlineEntry.Value;
-            double airlineTotal = 0;
-            double discounts = 0;
+            Airline airline = kvp.Value;
 
-            foreach (var flightEntry in airline.Flights)
+            double airlineSubtotal = 0.0;
+            double airlineDiscounts = 0.0;
+
+            // 3) Go through each flight
+            foreach (Flight flight in airline.Flights.Values)
             {
-                Flight flight = flightEntry.Value;
-                double flightTotal = flight.CalculateFees(); // ✅ Already includes all base and special request fees
+                // -- A) Fees from base + origin/dest + special request
+                double flightFee = flight.CalculateFees();
+                airlineSubtotal += flightFee;
 
-                airlineTotal += flightTotal;
-
-                // ✅ Apply Discounts Based on Assignment Criteria
-                if (flight.ExpectedTime.TimeOfDay < new TimeSpan(11, 0, 0) || flight.ExpectedTime.TimeOfDay > new TimeSpan(21, 0, 0))
+                // -- B) Flight-level discounts
+                if (flight.ExpectedTime.TimeOfDay < new TimeSpan(11, 0, 0) ||
+                    flight.ExpectedTime.TimeOfDay > new TimeSpan(21, 0, 0))
                 {
-                    discounts += 110; // Discount for early/late flights
+                    airlineDiscounts += 110;
                 }
 
                 if (flight.Origin == "DXB" || flight.Origin == "BKK" || flight.Origin == "NRT")
                 {
-                    discounts += 25; // Discount for flights from specific origins
+                    airlineDiscounts += 25;
                 }
 
                 if (flight is NORMFlight)
                 {
-                    discounts += 50; // Discount for flights without special requests
+                    airlineDiscounts += 50;
                 }
             }
 
-            // ✅ Apply 3% Discount If Airline Has More Than 5 Flights (before other discounts)
+            // -- C) Airline-level discounts
+            // For every 3 flights, discount $350
+            airlineDiscounts += (Math.Floor(airline.Flights.Count / 3.0) * 350);
+
+            // If airline has more than 5 flights, discount extra 3% of the airlineSubtotal
             if (airline.Flights.Count > 5)
             {
-                discounts += (airlineTotal * 0.03);
+                airlineDiscounts += (airlineSubtotal * 0.03);
             }
 
-            // ✅ Apply $350 Discount for Every 3 Flights
-            discounts += (Math.Floor(airline.Flights.Count / 3.0) * 350);
+            double finalAirlineFee = airlineSubtotal - airlineDiscounts;
 
-            // ✅ Calculate Final Airline Fees
-            double discountedAirlineTotal = airlineTotal - discounts;
+            // Accumulate into grand totals
+            grandSubtotal += airlineSubtotal;
+            grandDiscountTotal += airlineDiscounts;
+            grandFinalTotal += finalAirlineFee;
 
-            // ✅ Accumulate Global Totals
-            subtotal += airlineTotal;
-            subtotalDiscount += discounts;
-            discountedSubtotal += discountedAirlineTotal;
-
-            // ✅ Print Airline Fees
-            Console.WriteLine($"{airline.Name,-20} ${airlineTotal,-30:F2} ${discounts,-20:F2} ${discountedAirlineTotal,-16:F2}");
+            // Display per airline
+            Console.WriteLine($"{airline.Name,-23} ${airlineSubtotal,-26:F2} ${airlineDiscounts,-16:F2} ${finalAirlineFee,-10:F2}");
         }
 
-        // ✅ Calculate Total Discount Percentage
-        double discountPercent = (subtotalDiscount / subtotal) * 100;
+        // 4) Show final summary
+        double discountPercent = (grandFinalTotal > 0)
+             ? (grandDiscountTotal / grandFinalTotal) * 100
+             : 0.0;
 
-        // ✅ Print Final Summary
         Console.WriteLine("\n=============================================");
-        Console.WriteLine($"Subtotal of All Airline Fees Before Discount: ${subtotal:F2}");
-        Console.WriteLine($"Subtotal of All Airline Discounts: ${subtotalDiscount:F2}");
-        Console.WriteLine($"Final Total of All Airline Fees: ${discountedSubtotal:F2}");
-        Console.WriteLine($"Total Discount Received (in Percentage): {discountPercent:F2}%");
+        Console.WriteLine($"Subtotal of ALL Airline Fees (before discounts): ${grandSubtotal:F2}");
+        Console.WriteLine($"Subtotal of ALL Airline Discounts:               ${grandDiscountTotal:F2}");
+        Console.WriteLine($"Final Total of ALL Airline Fees (after discounts): ${grandFinalTotal:F2}");
+        Console.WriteLine($"Percentage of Discounts Over Final Total of Fees: {discountPercent:F2}%");
     }
 
     //DHUSH Additional Feature    //// 
